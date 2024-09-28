@@ -20,7 +20,7 @@
 		244038EF2CA7A8BF008D156C /* Artist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244038EE2CA7A8BF008D156C /* Artist.swift */; };
 		244038F12CA7AF40008D156C /* ArtistDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244038F02CA7AF40008D156C /* ArtistDetails.swift */; };
 		244038F32CA857AA008D156C /* ArtistDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244038F22CA857AA008D156C /* ArtistDetailViewModel.swift */; };
-		244038FB2CA8649D008D156C /* AuthToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244038FA2CA8649D008D156C /* AuthToken.swift */; };
+		244038FB2CA8649D008D156C /* AuthTokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244038FA2CA8649D008D156C /* AuthTokenManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,7 +57,7 @@
 		244038EE2CA7A8BF008D156C /* Artist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Artist.swift; sourceTree = "<group>"; };
 		244038F02CA7AF40008D156C /* ArtistDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistDetails.swift; sourceTree = "<group>"; };
 		244038F22CA857AA008D156C /* ArtistDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistDetailViewModel.swift; sourceTree = "<group>"; };
-		244038FA2CA8649D008D156C /* AuthToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthToken.swift; sourceTree = "<group>"; };
+		244038FA2CA8649D008D156C /* AuthTokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTokenManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,7 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				244038E82CA75F9F008D156C /* Service.swift */,
-				244038FA2CA8649D008D156C /* AuthToken.swift */,
+				244038FA2CA8649D008D156C /* AuthTokenManager.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -312,7 +312,7 @@
 				244038BB2CA71DDC008D156C /* DiscogsApp.swift in Sources */,
 				244038EF2CA7A8BF008D156C /* Artist.swift in Sources */,
 				244038E72CA75A0B008D156C /* SearchViewModel.swift in Sources */,
-				244038FB2CA8649D008D156C /* AuthToken.swift in Sources */,
+				244038FB2CA8649D008D156C /* AuthTokenManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
