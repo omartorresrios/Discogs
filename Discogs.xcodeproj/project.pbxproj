@@ -16,6 +16,7 @@
 		244038E72CA75A0B008D156C /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244038E62CA75A0B008D156C /* SearchViewModel.swift */; };
 		244038E92CA75F9F008D156C /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244038E82CA75F9F008D156C /* Service.swift */; };
 		244038EB2CA77E2A008D156C /* ArtistItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244038EA2CA77E2A008D156C /* ArtistItemView.swift */; };
+		244038ED2CA78CB6008D156C /* ArtistDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244038EC2CA78CB6008D156C /* ArtistDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,7 @@
 		244038E62CA75A0B008D156C /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		244038E82CA75F9F008D156C /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		244038EA2CA77E2A008D156C /* ArtistItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistItemView.swift; sourceTree = "<group>"; };
+		244038EC2CA78CB6008D156C /* ArtistDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +107,7 @@
 				244038BE2CA71DDF008D156C /* Assets.xcassets */,
 				244038C02CA71DDF008D156C /* Preview Content */,
 				244038EA2CA77E2A008D156C /* ArtistItemView.swift */,
+				244038EC2CA78CB6008D156C /* ArtistDetailView.swift */,
 			);
 			path = Discogs;
 			sourceTree = "<group>";
@@ -256,6 +259,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				244038E52CA75925008D156C /* TokenInputView.swift in Sources */,
+				244038ED2CA78CB6008D156C /* ArtistDetailView.swift in Sources */,
 				244038BD2CA71DDC008D156C /* SearchView.swift in Sources */,
 				244038EB2CA77E2A008D156C /* ArtistItemView.swift in Sources */,
 				244038E92CA75F9F008D156C /* Service.swift in Sources */,

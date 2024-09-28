@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Artist: Identifiable, Decodable {
+struct Artist: Identifiable, Decodable, Hashable {
 	let id: Int
 	let title: String
 	let thumb: String
@@ -27,7 +27,9 @@ struct SearchView: View {
 		NavigationStack {
 			ZStack {
 				List(viewModel.artists) { artist in
-					ArtistItemView(artist: artist)
+					NavigationLink(value: artist) {
+						ArtistItemView(artist: artist)
+					}
 				}
 				.navigationTitle("Search Artists")
 				.searchable(text: $viewModel.searchText)
@@ -43,6 +45,9 @@ struct SearchView: View {
 						}
 					}
 				)
+				.navigationDestination(for: Artist.self) { artist in
+					ArtistDetailView(artist: artist)
+				}
 			}
 		}
 		.onAppear {
