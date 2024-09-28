@@ -10,9 +10,9 @@ import Foundation
 
 class SearchViewModel: ObservableObject {
 	@Published var searchText: String = ""
-	private var authToken = ""
 	@Published var searchResults: [Artist] = []
 	@Published var isLoading: Bool = false
+	private var authToken = ""
 	private var cancellables = Set<AnyCancellable>()
 	
 	init() {
@@ -48,8 +48,8 @@ class SearchViewModel: ObservableObject {
 		}
 	}
 	
-	func setAuthToken(_ authToken: String) {
-		self.authToken = authToken
+	func setAuthToken(_ token: String) {
+		authToken = token
 	}
 }
 

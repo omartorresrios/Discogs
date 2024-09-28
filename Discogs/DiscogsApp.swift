@@ -9,15 +9,18 @@ import SwiftUI
 
 @main
 struct DiscogsApp: App {
-	@AppStorage("authToken") var authToken: String = ""
+	@StateObject private var authTokenManager = AuthTokenManager()
 	
     var body: some Scene {
         WindowGroup {
-			if authToken.isEmpty {
-				TokenInputView()
-			} else {
-				SearchView()
+			Group {
+				if authTokenManager.token.isEmpty {
+					TokenInputView()
+				} else {
+					SearchView()
+				}
 			}
+			.environmentObject(authTokenManager)
         }
     }
 }

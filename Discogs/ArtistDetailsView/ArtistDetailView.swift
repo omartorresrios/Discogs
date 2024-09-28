@@ -9,12 +9,11 @@ import SwiftUI
 
 struct ArtistDetailView: View {
 	@StateObject private var viewModel = ArtistDetailViewModel()
+	@EnvironmentObject var authTokenManager: AuthTokenManager
 	private var artist: Artist
-	private var authToken = ""
 	
-	init(searchResult: Artist, authToken: String) {
+	init(searchResult: Artist) {
 		self.artist = searchResult
-		self.authToken = authToken
 	}
 	
     var body: some View {
@@ -59,11 +58,11 @@ struct ArtistDetailView: View {
 			}
 		}
 		.onAppear {
-			viewModel.getArtistInfo(id: "\(artist.id)", authToken: authToken)
+			viewModel.getArtistInfo(id: "\(artist.id)", authToken: authTokenManager.token)
 		}
     }
 }
 
 #Preview {
-	ArtistDetailView(searchResult: Artist(id: 1, title: "nirvana", thumb: "http://www.thumbnail.com", coverImage: "https://st.discogs.com/5da07aaaa33ce7e947e10287f90bca903336d4e3/images/spacer.gif", type: "artist"), authToken: "token")
+	ArtistDetailView(searchResult: Artist(id: 1, title: "nirvana", thumb: "http://www.thumbnail.com", coverImage: "https://st.discogs.com/5da07aaaa33ce7e947e10287f90bca903336d4e3/images/spacer.gif", type: "artist"))
 }

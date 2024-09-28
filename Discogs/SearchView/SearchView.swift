@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SearchView: View {
 	@StateObject private var viewModel = SearchViewModel()
-	@AppStorage("authToken") var authToken: String = ""
+	@EnvironmentObject var tokenManager: AuthTokenManager
 	
     var body: some View {
 		NavigationStack {
@@ -34,12 +34,12 @@ struct SearchView: View {
 					}
 				)
 				.navigationDestination(for: Artist.self) { result in
-					ArtistDetailView(searchResult: result, authToken: authToken)
+					ArtistDetailView(searchResult: result)
 				}
 			}
 		}
 		.onAppear {
-			viewModel.setAuthToken(authToken)
+			viewModel.setAuthToken(tokenManager.token)
 		}
     }
 }
