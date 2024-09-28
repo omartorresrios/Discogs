@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct Artist: Identifiable, Decodable {
-	var id: Int
+	let id: Int
 	let title: String
+	let thumb: String
 }
 
 struct ArtistResponse: Decodable {
@@ -26,8 +27,8 @@ struct SearchView: View {
 		NavigationStack {
 			ZStack {
 				List(viewModel.artists) { artist in
-								Text(artist.title)
-							}
+					ArtistItemView(artist: artist)
+				}
 				.navigationTitle("Search Artists")
 				.searchable(text: $viewModel.searchText)
 				.overlay(
