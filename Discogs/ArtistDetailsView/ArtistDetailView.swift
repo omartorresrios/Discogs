@@ -11,10 +11,11 @@ struct ArtistDetailView: View {
 	@StateObject private var viewModel = ArtistDetailViewModel()
 	@EnvironmentObject var authTokenManager: AuthTokenManager
 	@State var showingAlbumsView = false
+	@State var showingBanMembersView = false
 	private var artist: Artist
 	
-	init(searchResult: Artist) {
-		self.artist = searchResult
+	init(artist: Artist) {
+		self.artist = artist
 	}
 	
     var body: some View {
@@ -51,13 +52,28 @@ struct ArtistDetailView: View {
 				}
 				Text(viewModel.artist?.name ?? "")
 				Text(viewModel.artist?.profile ?? "")
-				Button("See albums") {
-					showingAlbumsView = true
+				if let albums = viewModel.artist?.albums {
+					Button("See albums") {
+						showingAlbumsView = true
+					}
+				}
+				if !(viewModel.artist?.members ?? []).isEmpty {
+					Button("See band members") {
+						showingBanMembersView = true
+					}
 				}
 			}
 		}
 		.sheet(isPresented: $showingAlbumsView) {
 			AlbumsView(albums: viewModel.artist?.albums ?? [])
+			.presentationDetents([.medium])
+		}
+		.sheet(isPresented: $showingBanMembersView) {
+			ScrollView {
+				ForEach(viewModel.artist?.members ?? [], id: \.id) { member in
+					Text("\(member.name)")
+				}
+			}
 			.presentationDetents([.medium])
 		}
 		.onAppear {
@@ -67,5 +83,5 @@ struct ArtistDetailView: View {
 }
 
 #Preview {
-	ArtistDetailView(searchResult: .dummyArtist)
+	ArtistDetailView(artist: .dummyArtist)
 }

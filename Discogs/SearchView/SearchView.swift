@@ -34,7 +34,7 @@ struct SearchView: View {
 					}
 				)
 				.navigationDestination(for: Artist.self) { result in
-					ArtistDetailView(searchResult: result)
+					ArtistDetailView(artist: result)
 				}
 			}
 		}

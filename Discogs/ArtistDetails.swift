@@ -13,11 +13,13 @@ struct ArtistDetails: Decodable {
 	let images: [ArtistImage]?
 	let profile: String
 	let releasesUrl: String
+	let members: [Member]
 	var albums: [Album]?
+	
 	
 	enum CodingKeys: String, CodingKey {
 		case releasesUrl = "releases_url"
-		case id, name, images, profile, albums
+		case id, name, images, profile, members, albums
 	}
 }
 
@@ -42,6 +44,17 @@ struct AlbumResponse: Decodable {
 struct Album: Decodable {
 	let id: Int
 	let title: String
+}
+
+struct Member: Decodable {
+	let id: Int
+	let name: String
+	let thumbnailUrl: String
+	
+	enum CodingKeys: String, CodingKey {
+		case thumbnailUrl = "thumbnail_url"
+		case id, name
+	}
 }
 
 extension Album {
