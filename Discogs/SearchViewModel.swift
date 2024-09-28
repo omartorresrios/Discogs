@@ -11,7 +11,7 @@ import Foundation
 class SearchViewModel: ObservableObject {
 	@Published var searchText: String = ""
 	private var authToken = ""
-	@Published var artists: [Artist] = []
+	@Published var searchResults: [Artist] = []
 	@Published var isLoading: Bool = false
 	private var cancellables = Set<AnyCancellable>()
 	
@@ -25,22 +25,22 @@ class SearchViewModel: ObservableObject {
 
 	func getArtists(with query: String) {
 		guard !query.isEmpty else {
-			artists = []
+			searchResults = []
 			return
 		}
-		guard let url = URL(string: "https://api.discogs.com/database/search?q=\(query)&type=artist&token=\(authToken)") else {
+		guard let url = URL(string: "https://api.discogs.com/database/search?q=\(query)&token=\(authToken)") else {
 			return
 		}
 		isLoading = true
 		Task {
 			do {
-				let artists = try await Service.getArtists(url: url)
+				let searchResults = try await Service.getSearchResults(url: url)
 				await MainActor.run {
-					self.artists = artists
+					self.searchResults = searchResults
 					isLoading = false
 				}
 			} catch {
-				print("An error ocurred while fetching artists")
+				print("An error ocurred while fetching artists: ", error)
 				await MainActor.run {
 					isLoading = false
 				}

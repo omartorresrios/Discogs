@@ -10,18 +10,18 @@ import SwiftUI
 struct ArtistItemView: View {
 	private var artist: Artist
 	
-	init(artist: Artist) {
-		self.artist = artist
+	init(searchResult: Artist) {
+		self.artist = searchResult
 	}
 	
 	var body: some View {
 		HStack {
 			if artist.thumb.isEmpty {
-				Image(systemName: "person.fill")
-					.resizable()
-					.aspectRatio(contentMode: .fill)
-					.frame(width: 80, height: 80)
-					.clipped()
+				VStack {
+					Text("No thumbnail")
+				}
+				.frame(width: 80, height: 80)
+				.background(.red)
 			} else {
 				AsyncImage(url: URL(string: artist.thumb)) { image in
 					image
@@ -40,5 +40,5 @@ struct ArtistItemView: View {
 }
 
 #Preview {
-	ArtistItemView(artist: Artist(id: 1, title: "nirvana", thumb: "http://www.thumbnail.com"))
+	ArtistItemView(searchResult: Artist(id: 1, title: "nirvana", thumb: "http://www.thumbnail.com", coverImage: "", type: ""))
 }

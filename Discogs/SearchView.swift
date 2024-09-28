@@ -7,28 +7,16 @@
 
 import SwiftUI
 
-struct Artist: Identifiable, Decodable, Hashable {
-	let id: Int
-	let title: String
-	let thumb: String
-}
-
-struct ArtistResponse: Decodable {
-	let results: [Artist]
-}
-
 struct SearchView: View {
 	@StateObject private var viewModel = SearchViewModel()
 	@AppStorage("authToken") var authToken: String = ""
 	
-	let artists: [Artist] = []
-	
     var body: some View {
 		NavigationStack {
 			ZStack {
-				List(viewModel.artists) { artist in
-					NavigationLink(value: artist) {
-						ArtistItemView(artist: artist)
+				List(viewModel.searchResults) { result in
+					NavigationLink(value: result) {
+						ArtistItemView(searchResult: result)
 					}
 				}
 				.navigationTitle("Search Artists")
@@ -37,7 +25,7 @@ struct SearchView: View {
 					Group {
 						if viewModel.isLoading {
 							ProgressView()
-						} else if viewModel.artists.isEmpty && !viewModel.searchText.isEmpty {
+						} else if viewModel.searchResults.isEmpty && !viewModel.searchText.isEmpty {
 							Text("No results found")
 								.foregroundColor(.gray)
 						} else if viewModel.searchText.isEmpty {
@@ -45,8 +33,8 @@ struct SearchView: View {
 						}
 					}
 				)
-				.navigationDestination(for: Artist.self) { artist in
-					ArtistDetailView(artist: artist)
+				.navigationDestination(for: Artist.self) { result in
+					ArtistDetailView(searchResult: result, authToken: authToken)
 				}
 			}
 		}
