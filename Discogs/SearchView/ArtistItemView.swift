@@ -40,5 +40,5 @@ struct ArtistItemView: View {
 }
 
 #Preview {
-	ArtistItemView(searchResult: Artist(id: 1, title: "nirvana", thumb: "http://www.thumbnail.com", coverImage: "", type: ""))
+	ArtistItemView(searchResult: .dummyArtist)
 }

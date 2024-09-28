@@ -21,3 +21,11 @@ struct Artist: Identifiable, Decodable, Hashable {
 		case id, title, thumb, type
 	}
 }
+
+extension Artist {
+	static let dummyArtist = Artist(id: 1,
+									title: "Nirvana",
+									thumb: "http://www.thumbnail.com",
+									coverImage: "http://www.cover-image.com",
+									type: "artist")
+}

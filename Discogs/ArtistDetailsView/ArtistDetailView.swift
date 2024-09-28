@@ -10,6 +10,7 @@ import SwiftUI
 struct ArtistDetailView: View {
 	@StateObject private var viewModel = ArtistDetailViewModel()
 	@EnvironmentObject var authTokenManager: AuthTokenManager
+	@State var showingAlbumsView = false
 	private var artist: Artist
 	
 	init(searchResult: Artist) {
@@ -50,12 +51,14 @@ struct ArtistDetailView: View {
 				}
 				Text(viewModel.artist?.name ?? "")
 				Text(viewModel.artist?.profile ?? "")
-				Text("Albums:")
-					.background(.red)
-				ForEach(viewModel.artist?.albums ?? [], id: \.id) { album in
-					Text("\(album.id)")
+				Button("See albums") {
+					showingAlbumsView = true
 				}
 			}
+		}
+		.sheet(isPresented: $showingAlbumsView) {
+			AlbumsView(albums: viewModel.artist?.albums ?? [])
+			.presentationDetents([.medium])
 		}
 		.onAppear {
 			viewModel.getArtistInfo(id: "\(artist.id)", authToken: authTokenManager.token)
@@ -64,5 +67,5 @@ struct ArtistDetailView: View {
 }
 
 #Preview {
-	ArtistDetailView(searchResult: Artist(id: 1, title: "nirvana", thumb: "http://www.thumbnail.com", coverImage: "https://st.discogs.com/5da07aaaa33ce7e947e10287f90bca903336d4e3/images/spacer.gif", type: "artist"))
+	ArtistDetailView(searchResult: .dummyArtist)
 }

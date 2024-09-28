@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct TokenInputView: View {
-	@Environment(\.dismiss) var dismiss
 	@State private var tokenInput: String = ""
 	@EnvironmentObject var authTokenManager: AuthTokenManager
 

@@ -43,3 +43,7 @@ struct Album: Decodable {
 	let id: Int
 	let title: String
 }
+
+extension Album {
+	static let dummyAlbum = Album(id: 1, title: "album")
+}
