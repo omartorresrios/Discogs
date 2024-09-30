@@ -58,14 +58,7 @@ final class SearchViewModel: ObservableObject {
 	}
 	
 	private func setErrorMessage(with error: SearchRequestError) {
-		switch error {
-		case .internalServer:
-			errorMessage = error.localizedDescription.description
-		case .badUrl:
-			errorMessage =  "The Url request is malformed. We are fixing it right now!"
-		case .unknow:
-			errorMessage =  "There was an internal error. Please try again later."
-		}
+		errorMessage = error.description
 	}
 	
 	func loadMoreArtists(result: Artist) {

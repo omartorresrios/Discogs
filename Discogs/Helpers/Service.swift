@@ -16,16 +16,24 @@ protocol Service {
 final class DiscogsService: Service {
 	private let authTokenManager: AuthTokenManager
 	private let baseUrl = "https://api.discogs.com"
+	
 	init(authTokenManager: AuthTokenManager) {
 		self.authTokenManager = authTokenManager
 	}
 	
-	func getSearchResults(with query: String, page: Int) async throws -> [Artist] {
-		guard let url = URL(string: baseUrl + "/database/search?q=\(query)&type=artist?page=\(page)&per_page=30") else {
-			throw SearchRequestError.badUrl
+	private func makeRequest<T: DiscogsError>(with url: String, 
+											  errorType: T.Type) throws -> URLRequest {
+		guard let url = URL(string: url) else {
+			throw T.self == SearchRequestError.self ? SearchRequestError.badUrl : ArtistDetailsError.badUrl
 		}
 		var request = URLRequest(url: url)
 		request.addValue("Discogs token=\(authTokenManager.token)", forHTTPHeaderField: "Authorization")
+		return request
+	}
+	
+	func getSearchResults(with query: String, page: Int) async throws -> [Artist] {
+		let urlString = "\(baseUrl)/database/search?q=\(query)&type=artist&page=\(page)&per_page=30"
+		let request = try makeRequest(with: urlString, errorType: SearchRequestError.self)
 		do {
 			let (data, response) = try await URLSession.shared.data(for: request)
 			guard let httpResponse = response as? HTTPURLResponse else {
@@ -38,7 +46,7 @@ final class DiscogsService: Service {
 			case 500:
 				throw SearchRequestError.internalServer
 			default:
-				throw SearchRequestError.unknow
+				throw SearchRequestError.unknown
 			}
 		} catch {
 			throw error
@@ -46,40 +54,46 @@ final class DiscogsService: Service {
 	}
 	
 	func getArtistInfo(id: String) -> AnyPublisher<ArtistDetails, ArtistDetailsError> {
-		guard let url = URL(string: baseUrl + "/artists/\(id)") else {
-			return Fail(error: ArtistDetailsError.badUrl).eraseToAnyPublisher()
+		let urlString = "\(baseUrl)/artists/\(id)"
+		do {
+			let request = try makeRequest(with: urlString, errorType: ArtistDetailsError.self)
+			return URLSession.shared.dataTaskPublisher(for: request)
+				.tryMap { result in
+					guard let httpResponse = result.response as? HTTPURLResponse else {
+						throw ArtistDetailsError.unknown
+					}
+					switch httpResponse.statusCode {
+					case 200:
+						return result.data
+					case 404:
+						throw ArtistDetailsError.notFound
+					default:
+						throw ArtistDetailsError.unknown
+					}
+				}
+				.decode(type: ArtistDetails.self, decoder: JSONDecoder())
+				.mapError { error -> ArtistDetailsError in
+					return error as? ArtistDetailsError ?? .unknown
+				}
+				.flatMap { [weak self] artist -> AnyPublisher<ArtistDetails, ArtistDetailsError> in
+					guard let self = self else {
+						return Fail(error: ArtistDetailsError.unknown).eraseToAnyPublisher()
+					}
+					return self.fetchAlbums(for: artist)
+				}
+				.eraseToAnyPublisher()
+		} catch {
+			return Fail(error: error as? ArtistDetailsError ?? .unknown).eraseToAnyPublisher()
 		}
-		var request = URLRequest(url: url)
-		request.addValue("Discogs token=\(authTokenManager.token)", forHTTPHeaderField: "Authorization")
-		return URLSession.shared.dataTaskPublisher(for: request)
-			.tryMap { result in
-				guard let httpResponse = result.response as? HTTPURLResponse else {
-					throw SearchRequestError.internalServer
-				}
-				switch httpResponse.statusCode {
-				case 200:
-					return result.data
-				case 404:
-					throw ArtistDetailsError.notFound
-				default:
-					throw ArtistDetailsError.unknow
-				}
-			}
-			.decode(type: ArtistDetails.self, decoder: JSONDecoder())
-			.mapError { error -> ArtistDetailsError in
-				return error as? ArtistDetailsError ?? .unknow
-			}
-			.flatMap { [weak self] artist -> AnyPublisher<ArtistDetails, ArtistDetailsError> in
-				guard let self = self,
-					  let albumsURL = URL(string: artist.releasesUrl + "?per_page=30") else {
-					return Fail(error: ArtistDetailsError.badUrl).eraseToAnyPublisher()
-				}
-				var albumsRequest = URLRequest(url: albumsURL)
-				albumsRequest.addValue("Discogs token=\(self.authTokenManager.token)", forHTTPHeaderField: "Authorization")
-				return URLSession.shared.dataTaskPublisher(for: albumsRequest)
-					.tryMap { albumsResult in
+	}
+	
+	private func fetchAlbums(for artist: ArtistDetails) -> AnyPublisher<ArtistDetails, ArtistDetailsError> {
+		do {
+			let albumsRequest = try makeRequest(with: artist.releasesUrl + "?per_page=30", errorType: ArtistDetailsError.self)
+			return URLSession.shared.dataTaskPublisher(for: albumsRequest)
+				.tryMap { albumsResult in
 					guard let httpResponse = albumsResult.response as? HTTPURLResponse else {
-						throw SearchRequestError.internalServer
+						throw ArtistDetailsError.unknown
 					}
 					switch httpResponse.statusCode {
 					case 200:
@@ -87,12 +101,12 @@ final class DiscogsService: Service {
 					case 404:
 						throw ArtistDetailsError.notFound
 					default:
-						throw ArtistDetailsError.unknow
+						throw ArtistDetailsError.unknown
 					}
 				}
 				.decode(type: AlbumResponse.self, decoder: JSONDecoder())
 				.mapError { error -> ArtistDetailsError in
-					return error as? ArtistDetailsError ?? .unknow
+					return error as? ArtistDetailsError ?? .unknown
 				}
 				.map { albumsResponse in
 					var updatedArtist = artist
@@ -100,7 +114,8 @@ final class DiscogsService: Service {
 					return updatedArtist
 				}
 				.eraseToAnyPublisher()
-			}
-			.eraseToAnyPublisher()
+		} catch {
+			return Fail(error: error as? ArtistDetailsError ?? .unknown).eraseToAnyPublisher()
+		}
 	}
 }

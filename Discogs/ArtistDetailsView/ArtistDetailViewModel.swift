@@ -41,13 +41,6 @@ final class ArtistDetailViewModel: ObservableObject {
 	}
 	
 	private func setErrorMessage(with error: ArtistDetailsError) -> String {
-		switch error {
-		case .badUrl:
-			return "The Url request is malformed. We are fixing it right now!"
-		case .notFound:
-			return error.localizedDescription.description
-		case .unknow:
-			return "There was an internal error. Please try again later."
-		}
+		return error.description
 	}
 }
