@@ -27,7 +27,6 @@ struct MembersView: View {
 			}
 		}
 		.padding(.horizontal)
-		.background(.green)
     }
 }
 

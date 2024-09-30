@@ -12,10 +12,11 @@ final class SearchViewModel: ObservableObject {
 	@Published var searchText: String = ""
 	@Published var searchResults: [Artist] = []
 	@Published var isLoading: Bool = false
-	private var authToken = ""
+	private let service: Service
 	private var cancellables = Set<AnyCancellable>()
 	
-	init() {
+	init(service: Service) {
+		self.service = service
 		$searchText
 			.debounce(for: .milliseconds(300), scheduler: RunLoop.main)
 			.removeDuplicates()
@@ -28,13 +29,13 @@ final class SearchViewModel: ObservableObject {
 			searchResults = []
 			return
 		}
-		guard let url = URL(string: "https://api.discogs.com/database/search?q=\(query)&token=\(authToken)") else {
+		guard let url = URL(string: "https://api.discogs.com/database/search?q=\(query)") else {
 			return
 		}
 		isLoading = true
 		Task {
 			do {
-				let searchResults = try await Service.getSearchResults(url: url)
+				let searchResults = try await service.getSearchResults(url: url)
 				await MainActor.run {
 					self.searchResults = searchResults
 					isLoading = false
@@ -46,10 +47,6 @@ final class SearchViewModel: ObservableObject {
 				}
 			}
 		}
-	}
-	
-	func setAuthToken(_ token: String) {
-		authToken = token
 	}
 }
 

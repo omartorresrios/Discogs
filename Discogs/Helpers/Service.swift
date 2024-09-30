@@ -8,24 +8,40 @@
 import Foundation
 import Combine
 
-final class Service {
+protocol Service {
+	func getSearchResults(url: URL) async throws -> [Artist]
+	func getArtistInfo(url: URL) -> AnyPublisher<ArtistDetails, Error>
+}
+
+final class DiscogsService: Service {
+	private let authTokenManager: AuthTokenManager
 	
-	static func getSearchResults(url: URL) async throws -> [Artist] {
-		let request = URLRequest(url: url)
+	init(authTokenManager: AuthTokenManager) {
+		self.authTokenManager = authTokenManager
+	}
+	
+	func getSearchResults(url: URL) async throws -> [Artist] {
+		var request = URLRequest(url: url)
+		request.addValue("Discogs token=\(authTokenManager.token)", forHTTPHeaderField: "Authorization")
 		let (data, _) = try await URLSession.shared.data(for: request)
 		let artistsResponse = try JSONDecoder().decode(SearchResponse.self, from: data)
 		return artistsResponse.results
 	}
 	
 	func getArtistInfo(url: URL) -> AnyPublisher<ArtistDetails, Error> {
-		return URLSession.shared.dataTaskPublisher(for: url)
+		var request = URLRequest(url: url)
+		request.addValue("Discogs token=\(authTokenManager.token)", forHTTPHeaderField: "Authorization")
+		return URLSession.shared.dataTaskPublisher(for: request)
 			.map(\.data)
 			.decode(type: ArtistDetails.self, decoder: JSONDecoder())
-			.flatMap { artist -> AnyPublisher<ArtistDetails, Error> in
-				guard let albumsURL = URL(string: artist.releasesUrl) else {
+			.flatMap { [weak self] artist -> AnyPublisher<ArtistDetails, Error> in
+				guard let self = self,
+					  let albumsURL = URL(string: artist.releasesUrl) else {
 					return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
 				}
-				return URLSession.shared.dataTaskPublisher(for: albumsURL)
+				var albumsRequest = URLRequest(url: albumsURL)
+				albumsRequest.addValue("Discogs token=\(self.authTokenManager.token)", forHTTPHeaderField: "Authorization")
+				return URLSession.shared.dataTaskPublisher(for: albumsRequest)
 					.map(\.data)
 					.decode(type: AlbumResponse.self, decoder: JSONDecoder())
 					.map { albumsResponse in

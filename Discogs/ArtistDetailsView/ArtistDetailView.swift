@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct ArtistDetailView: View {
-	@StateObject private var viewModel = ArtistDetailViewModel()
-	@EnvironmentObject var authTokenManager: AuthTokenManager
+	@StateObject private var viewModel: ArtistDetailViewModel
 	@State var showingAlbumsView = false
 	@State var showingBandMembersView = false
 	private let artist: Artist
 	
-	init(artist: Artist) {
+	init(artist: Artist, service: Service) {
 		self.artist = artist
+		_viewModel = StateObject(wrappedValue: ArtistDetailViewModel(service: service))
 	}
 	
     var body: some View {
@@ -66,12 +66,12 @@ struct ArtistDetailView: View {
 			.presentationDetents([.medium])
 		}
 		.onAppear {
-			viewModel.getArtistInfo(id: "\(artist.id)", authToken: authTokenManager.token)
+			viewModel.getArtistInfo(id: "\(artist.id)")
 		}
     }
 }
 
 #Preview {
-	ArtistDetailView(artist: .dummyArtist)
+	ArtistDetailView(artist: .dummyArtist, service: DiscogsService(authTokenManager: AuthTokenManager()))
 		.environmentObject(AuthTokenManager())
 }

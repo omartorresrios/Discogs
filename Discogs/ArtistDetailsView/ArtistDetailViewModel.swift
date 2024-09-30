@@ -11,14 +11,19 @@ import Combine
 final class ArtistDetailViewModel: ObservableObject {
 	@Published var isLoading = false
 	@Published var artist: ArtistDetails?
+	private let service: Service
 	private var cancellables = Set<AnyCancellable>()
 	
-	func getArtistInfo(id: String, authToken: String) {
-		guard let url = URL(string: "https://api.discogs.com/artists/\(id)?token=\(authToken)") else {
+	init(service: Service) {
+		self.service = service
+	}
+	
+	func getArtistInfo(id: String) {
+		guard let url = URL(string: "https://api.discogs.com/artists/\(id)") else {
 			return
 		}
 		isLoading = true
-		Service().getArtistInfo(url: url)
+		service.getArtistInfo(url: url)
 		.receive(on: DispatchQueue.main)
 		.sink(receiveCompletion: { completion in
 			switch completion {

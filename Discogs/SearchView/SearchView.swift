@@ -8,8 +8,13 @@
 import SwiftUI
 
 struct SearchView: View {
-	@StateObject private var viewModel = SearchViewModel()
-	@EnvironmentObject var tokenManager: AuthTokenManager
+	@StateObject private var viewModel: SearchViewModel
+	private let service: Service
+	
+	init(service: Service) {
+		self.service = service
+		_viewModel = StateObject(wrappedValue: SearchViewModel(service: service))
+	}
 	
     var body: some View {
 		NavigationStack {
@@ -34,16 +39,13 @@ struct SearchView: View {
 					}
 				)
 				.navigationDestination(for: Artist.self) { result in
-					ArtistDetailView(artist: result)
+					ArtistDetailView(artist: result, service: service)
 				}
 			}
-		}
-		.onAppear {
-			viewModel.setAuthToken(tokenManager.token)
 		}
     }
 }
 
 #Preview {
-    SearchView()
+	SearchView(service: DiscogsService(authTokenManager: AuthTokenManager()))
 }

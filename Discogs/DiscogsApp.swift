@@ -17,10 +17,10 @@ struct DiscogsApp: App {
 				if authTokenManager.token.isEmpty {
 					TokenInputView()
 				} else {
-					SearchView()
+					SearchView(service: DiscogsService(authTokenManager: authTokenManager))
 				}
 			}
-			.environmentObject(authTokenManager)
+			
         }
     }
 }
