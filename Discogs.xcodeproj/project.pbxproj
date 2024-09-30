@@ -34,6 +34,7 @@
 		24D5AF0C2CAB3E5D00DA48E6 /* ArtistUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D5AF0B2CAB3E5D00DA48E6 /* ArtistUseCase.swift */; };
 		24D5AF0E2CAB3F5D00DA48E6 /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D5AF0D2CAB3F5D00DA48E6 /* Album.swift */; };
 		24D5AF102CAB407F00DA48E6 /* ArtistDetailsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D5AF0F2CAB407F00DA48E6 /* ArtistDetailsViewModelTests.swift */; };
+		24D5AF122CAB43D000DA48E6 /* AlbumsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D5AF112CAB43D000DA48E6 /* AlbumsViewModelTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +77,7 @@
 		24D5AF0B2CAB3E5D00DA48E6 /* ArtistUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistUseCase.swift; sourceTree = "<group>"; };
 		24D5AF0D2CAB3F5D00DA48E6 /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
 		24D5AF0F2CAB407F00DA48E6 /* ArtistDetailsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistDetailsViewModelTests.swift; sourceTree = "<group>"; };
+		24D5AF112CAB43D000DA48E6 /* AlbumsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumsViewModelTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +146,7 @@
 			children = (
 				244038CB2CA71DDF008D156C /* SearchViewModelTests.swift */,
 				24D5AF0F2CAB407F00DA48E6 /* ArtistDetailsViewModelTests.swift */,
+				24D5AF112CAB43D000DA48E6 /* AlbumsViewModelTests.swift */,
 			);
 			path = DiscogsTests;
 			sourceTree = "<group>";
@@ -342,6 +345,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				24D5AF102CAB407F00DA48E6 /* ArtistDetailsViewModelTests.swift in Sources */,
+				24D5AF122CAB43D000DA48E6 /* AlbumsViewModelTests.swift in Sources */,
 				244038CC2CA71DDF008D156C /* SearchViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

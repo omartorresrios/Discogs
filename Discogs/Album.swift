@@ -9,7 +9,7 @@ struct AlbumResponse: Decodable {
 	let releases: [Album]
 }
 
-struct Album: Decodable {
+struct Album: Decodable, Equatable {
 	let id: Int
 	let title: String
 	let type: String
@@ -24,5 +24,12 @@ extension Album {
 								  type: "master",
 								  year: 1990,
 								  label: "GRD",
+								  thumb: "https://api.discogs.com/masters/155876")
+	
+	static let dummyAlbum1 = Album(id: 2,
+								  title: "album 2",
+								  type: "master",
+								  year: 1960,
+								   label: nil,
 								  thumb: "https://api.discogs.com/masters/155876")
 }
