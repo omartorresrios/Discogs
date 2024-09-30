@@ -79,13 +79,12 @@ struct AlbumsView: View {
 	
 	private var albumList: some View {
 		ScrollView {
-			VStack(alignment: .leading, spacing: 10) {
-				ForEach(viewModel.albums, id: \.id) { album in
-					AlbumItemView(album)
-				}
+			ForEach(viewModel.albums, id: \.id) { album in
+				AlbumItemView(album)
+					.frame(maxWidth: .infinity, alignment: .leading)
 			}
-			.padding(.horizontal)
 		}
+		.padding(.horizontal)
 	}
 }
 

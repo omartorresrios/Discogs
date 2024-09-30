@@ -26,6 +26,7 @@
 		244039022CAA2C99008D156C /* AlbumsOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244039012CAA2C99008D156C /* AlbumsOrder.swift */; };
 		244039042CAA36F1008D156C /* AlbumItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244039032CAA36F1008D156C /* AlbumItemView.swift */; };
 		244039062CAA390E008D156C /* MembersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244039052CAA390E008D156C /* MembersView.swift */; };
+		244039082CAA3E3E008D156C /* MemberItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244039072CAA3E3E008D156C /* MemberItemView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		244039012CAA2C99008D156C /* AlbumsOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumsOrder.swift; sourceTree = "<group>"; };
 		244039032CAA36F1008D156C /* AlbumItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumItemView.swift; sourceTree = "<group>"; };
 		244039052CAA390E008D156C /* MembersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembersView.swift; sourceTree = "<group>"; };
+		244039072CAA3E3E008D156C /* MemberItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberItemView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +182,7 @@
 				244038EC2CA78CB6008D156C /* ArtistDetailView.swift */,
 				244038F22CA857AA008D156C /* ArtistDetailViewModel.swift */,
 				244039052CAA390E008D156C /* MembersView.swift */,
+				244039072CAA3E3E008D156C /* MemberItemView.swift */,
 			);
 			path = ArtistDetailsView;
 			sourceTree = "<group>";
@@ -337,6 +340,7 @@
 				244038F12CA7AF40008D156C /* ArtistDetails.swift in Sources */,
 				244038EB2CA77E2A008D156C /* ArtistItemView.swift in Sources */,
 				244038E92CA75F9F008D156C /* Service.swift in Sources */,
+				244039082CAA3E3E008D156C /* MemberItemView.swift in Sources */,
 				244038BB2CA71DDC008D156C /* DiscogsApp.swift in Sources */,
 				244038EF2CA7A8BF008D156C /* Artist.swift in Sources */,
 				244038E72CA75A0B008D156C /* SearchViewModel.swift in Sources */,

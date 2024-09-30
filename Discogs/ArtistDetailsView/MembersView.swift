@@ -15,14 +15,22 @@ struct MembersView: View {
 	}
 	
     var body: some View {
-		ScrollView {
-			ForEach(members, id: \.id) { member in
-				Text("\(member.name)")
+		VStack(spacing: 5) {
+			Text("Members")
+				.font(.title2)
+				.padding()
+			ScrollView {
+				ForEach(members, id: \.id) { member in
+					MemberItemView(member)
+						.frame(maxWidth: .infinity, alignment: .leading)
+				}
 			}
 		}
+		.padding(.horizontal)
+		.background(.green)
     }
 }
 
 #Preview {
-	MembersView(members: [.dummyMember])
+	MembersView(members: [.dummyMember, .dummyMember])
 }
