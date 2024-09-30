@@ -23,9 +23,7 @@ final class ArtistDetailViewModel: ObservableObject {
 		service.getArtistInfo(id: id)
 		.receive(on: DispatchQueue.main)
 		.sink(receiveCompletion: { [weak self] completion in
-			guard let self else {
-				return
-			}
+			guard let self else { return }
 			switch completion {
 			case .finished:
 				break

@@ -27,7 +27,7 @@ struct SearchView: View {
 						viewModel.loadMoreArtists(result: result)
 					}
 				}
-				if viewModel.showLoader() {
+				if viewModel.isLoading {
 					VStack {
 						ProgressView()
 							.progressViewStyle(CircularProgressViewStyle(tint: .white))
@@ -38,9 +38,10 @@ struct SearchView: View {
 					.cornerRadius(15)
 				} else if viewModel.showNoResults() {
 					Text("No results found")
-						.foregroundColor(.gray)
 				} else if viewModel.showEmptyView() {
 					Text("Search for an artist!")
+				} else if viewModel.showErrorMessage() {
+					Text(viewModel.errorMessage)
 				}
 			}
 			.navigationTitle("Search Artists")

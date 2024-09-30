@@ -12,25 +12,33 @@ final class SearchViewModel: ObservableObject {
 	@Published var searchText = ""
 	@Published var searchResults: [Artist] = []
 	@Published var isLoading = false
+	@Published var errorMessage = ""
 	private var currentPage = 1
 	private let service: Service
 	private var cancellables = Set<AnyCancellable>()
 	
 	init(service: Service) {
 		self.service = service
+		subscribeToSearchText()
+	}
+	
+	private func subscribeToSearchText() {
 		$searchText
 			.debounce(for: .milliseconds(300), scheduler: RunLoop.main)
 			.removeDuplicates()
-			.sink { [weak self] in self?.getArtists(with: $0) }
+			.sink { [weak self] in
+				guard let self else { return }
+				if !$0.isEmpty {
+					self.getArtists(with: $0)
+				} else {
+					self.searchResults = []
+					currentPage = 1
+				}
+			}
 			.store(in: &cancellables)
 	}
 	
 	func getArtists(with query: String) {
-		guard !query.isEmpty else {
-			searchResults = []
-			currentPage = 1
-			return
-		}
 		isLoading = true
 		currentPage = 1
 		Task {
@@ -40,12 +48,25 @@ final class SearchViewModel: ObservableObject {
 					self.searchResults = searchResults
 					isLoading = false
 				}
-			} catch {
-				print("An error ocurred while fetching artists: ", error)
+			} catch let error as SearchRequestError {
+				switch error {
+				case .internalServer:
+					await setErrorMessage(with: error.localizedDescription.description)
+				case .badUrl:
+					await setErrorMessage(with: "The Url request is malformed. We are fixing it right now!")
+				case .unknow:
+					await setErrorMessage(with: "There was an internal error. Please try again.")
+				}
 				await MainActor.run {
-					isLoading = false
+					self.isLoading = false
 				}
 			}
+		}
+	}
+	
+	private func setErrorMessage(with message: String) async {
+		await MainActor.run {
+			errorMessage = message
 		}
 	}
 	
@@ -72,8 +93,8 @@ final class SearchViewModel: ObservableObject {
 		}
 	}
 	
-	func showLoader() -> Bool {
-		isLoading && !searchResults.isEmpty
+	func showErrorMessage() -> Bool {
+		!errorMessage.isEmpty
 	}
 	
 	func showNoResults() -> Bool {

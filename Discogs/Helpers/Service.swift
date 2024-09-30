@@ -15,24 +15,38 @@ protocol Service {
 
 final class DiscogsService: Service {
 	private let authTokenManager: AuthTokenManager
-	
+	private let baseUrl = "https://api.discogs.com"
 	init(authTokenManager: AuthTokenManager) {
 		self.authTokenManager = authTokenManager
 	}
 	
 	func getSearchResults(with query: String, page: Int) async throws -> [Artist] {
-		guard let url = URL(string: "https://api.discogs.com/database/search?q=\(query)&type=artist?page=\(page)&per_page=30") else {
-			return []
+		guard let url = URL(string: baseUrl + "/database/search?q=\(query)&type=artist?page=\(page)&per_page=30") else {
+			throw SearchRequestError.badUrl
 		}
 		var request = URLRequest(url: url)
 		request.addValue("Discogs token=\(authTokenManager.token)", forHTTPHeaderField: "Authorization")
-		let (data, _) = try await URLSession.shared.data(for: request)
-		let artistsResponse = try JSONDecoder().decode(SearchResponse.self, from: data)
-		return artistsResponse.results
+		do {
+			let (data, response) = try await URLSession.shared.data(for: request)
+			guard let httpResponse = response as? HTTPURLResponse else {
+				throw SearchRequestError.internalServer
+			}
+			switch httpResponse.statusCode {
+			case 200:
+				let artistsResponse = try JSONDecoder().decode(SearchResponse.self, from: data)
+				return artistsResponse.results
+			case 500:
+				throw SearchRequestError.internalServer
+			default:
+				throw SearchRequestError.unknow
+			}
+		} catch {
+			throw error
+		}
 	}
 	
 	func getArtistInfo(id: String) -> AnyPublisher<ArtistDetails, Error> {
-		guard let url = URL(string: "https://api.discogs.com/artists/\(id)") else {
+		guard let url = URL(string: baseUrl + "/artists/\(id)") else {
 			return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
 		}
 		var request = URLRequest(url: url)
