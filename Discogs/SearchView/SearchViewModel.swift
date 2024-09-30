@@ -49,24 +49,22 @@ final class SearchViewModel: ObservableObject {
 					isLoading = false
 				}
 			} catch let error as SearchRequestError {
-				switch error {
-				case .internalServer:
-					await setErrorMessage(with: error.localizedDescription.description)
-				case .badUrl:
-					await setErrorMessage(with: "The Url request is malformed. We are fixing it right now!")
-				case .unknow:
-					await setErrorMessage(with: "There was an internal error. Please try again.")
-				}
 				await MainActor.run {
+					self.setErrorMessage(with: error)
 					self.isLoading = false
 				}
 			}
 		}
 	}
 	
-	private func setErrorMessage(with message: String) async {
-		await MainActor.run {
-			errorMessage = message
+	private func setErrorMessage(with error: SearchRequestError) {
+		switch error {
+		case .internalServer:
+			errorMessage = error.localizedDescription.description
+		case .badUrl:
+			errorMessage =  "The Url request is malformed. We are fixing it right now!"
+		case .unknow:
+			errorMessage =  "There was an internal error. Please try again later."
 		}
 	}
 	
