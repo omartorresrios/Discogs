@@ -24,5 +24,6 @@ final class AlbumsViewModel: ObservableObject {
 	
 	func setAlbums(albums: [Album]) {
 		self.albums = albums
+		sortAlbumsByYear()
 	}
 }

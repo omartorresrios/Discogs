@@ -48,56 +48,56 @@ struct AlbumsView: View {
 							}
 						}
 					}
-					Button("Clear filter") {
-						viewModel.setAlbums(albums: albums)
-						selectedOrder = .year
-					}
 				}
 				.padding()
-				HStack {
-					Text("Albums")
-						.padding()
+				Button("Clear filter") {
+					viewModel.setAlbums(albums: albums)
+					selectedOrder = .year
 				}
-				ScrollView {
-					VStack(alignment: .leading) {
-						ForEach(viewModel.albums, id: \.id) { album in
-							HStack {
-								if let url = URL(string: album.thumb) {
-									AsyncImage(url: url) { image in
-										image
-											.resizable()
-											.aspectRatio(contentMode: .fit)
-											.frame(width: 50, height: 50)
-											.clipped()
-									} placeholder: {
-										ProgressView()
-											.background(.green)
-											.frame(width: 50, height: 50)
-									}
-								} else {
-									VStack {
-										Text("No thumbnail")
-									}
-									.frame(width: 80, height: 80)
-									.background(.red)
+			}
+			HStack {
+				Text("Albums")
+					.padding()
+			}
+			ScrollView {
+				VStack(alignment: .leading) {
+					ForEach(viewModel.albums, id: \.id) { album in
+						HStack {
+							if let url = URL(string: album.thumb) {
+								AsyncImage(url: url) { image in
+									image
+										.resizable()
+										.aspectRatio(contentMode: .fit)
+										.frame(width: 50, height: 50)
+										.clipped()
+								} placeholder: {
+									ProgressView()
+										.background(.green)
+										.frame(width: 50, height: 50)
 								}
-								VStack(alignment: .leading) {
-									Text("Title: \(album.title)")
-									Text("Type: \(album.type)")
-									Text("Year: \(album.year)")
+							} else {
+								VStack {
+									Text("No thumbnail")
 								}
-								.padding(.leading, 8)
+								.frame(width: 80, height: 80)
+								.background(.red)
 							}
-							.background(.red)
-							.padding(.vertical, 4)
+							VStack(alignment: .leading) {
+								Text("Title: \(album.title)")
+								Text("Type: \(album.type)")
+								Text("Year: \(album.year)")
+							}
+							.padding(.leading, 8)
 						}
+						.background(.red)
+						.padding(.vertical, 4)
 					}
-					.padding(.horizontal)
 				}
+				.padding(.horizontal)
 			}
-			.onAppear {
-				viewModel.setAlbums(albums: albums)
-			}
+		}
+		.onAppear {
+			viewModel.setAlbums(albums: albums)
 		}
 	}
 	
