@@ -9,18 +9,18 @@ import SwiftUI
 
 @main
 struct DiscogsApp: App {
-	@State private var isShowingTokenInputView = true
-	@AppStorage("authToken") var authToken: String = ""
+	@StateObject private var authTokenManager = AuthTokenManager()
 	
     var body: some Scene {
         WindowGroup {
-            SearchView()
-			.fullScreenCover(isPresented: $isShowingTokenInputView) {
-				TokenInputView()
+			Group {
+				if authTokenManager.token.isEmpty {
+					TokenInputView()
+				} else {
+					SearchView(service: DiscogsService(authTokenManager: authTokenManager))
+				}
 			}
-			.onAppear {
-				isShowingTokenInputView = authToken.isEmpty
-			}
+			
         }
     }
 }
