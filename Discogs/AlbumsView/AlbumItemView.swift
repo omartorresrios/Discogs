@@ -36,7 +36,9 @@ struct AlbumItemView: View {
 			VStack(alignment: .leading) {
 				Text("Title: \(album.title)")
 				Text("Type: \(album.type)")
-				Text("Year: \(album.year)")
+				if let year = album.year {
+					Text("Year: \(year)")
+				}
 			}
 		}
     }

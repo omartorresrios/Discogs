@@ -13,7 +13,7 @@ struct ArtistDetails: Decodable {
 	let images: [ArtistImage]?
 	let profile: String
 	let releasesUrl: String
-	let members: [Member]
+	let members: [Member]?
 	var albums: [Album]?
 	
 	
@@ -45,7 +45,7 @@ struct Album: Decodable {
 	let id: Int
 	let title: String
 	let type: String
-	let year: Int
+	let year: Int?
 	let label: String?
 	let thumb: String
 }

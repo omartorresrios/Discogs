@@ -20,48 +20,41 @@ struct ArtistDetailView: View {
 	
     var body: some View {
 		ScrollView {
-			HStack {
-				AsyncImage(url: URL(string: artist.coverImage)) { image in
-					image
-						.resizable()
-						.aspectRatio(contentMode: .fit)
-						.frame(width: 50, height: 50)
-						.clipped()
-				} placeholder: {
-					ProgressView()
-						.frame(width: 50, height: 50)
-				}
-				VStack {
-					Text(artist.title)
-					Text(artist.type)
-				}
-			}
-			VStack {
+			VStack(spacing: 10) {
 				if let primaryImageUrl = viewModel.artist?.images?.first(where: { $0.type == "primary" })?.resourceUrl,
 				   let url = URL(string: primaryImageUrl) {
 					AsyncImage(url: url) { image in
 						image
 							.resizable()
 							.aspectRatio(contentMode: .fit)
-							.frame(width: 50, height: 50)
 							.clipped()
 					} placeholder: {
 						ProgressView()
 							.frame(width: 50, height: 50)
 					}
 				}
-				Text(viewModel.artist?.name ?? "")
-				Text(viewModel.artist?.profile ?? "")
-				if let albums = viewModel.artist?.albums {
-					Button("See albums") {
-						showingAlbumsView = true
+				VStack(alignment: .leading, spacing: 10) {
+					HStack {
+						Text(viewModel.artist?.name ?? "")
+						Spacer()
+						VStack {
+							if viewModel.artist?.albums != nil {
+								Button("See albums") {
+									showingAlbumsView = true
+								}
+							}
+							if !(viewModel.artist?.members ?? []).isEmpty {
+								Button("See band members") {
+									showingBandMembersView = true
+								}
+							}
+						}
 					}
+					Text(viewModel.artist?.profile ?? "")
 				}
-				if !(viewModel.artist?.members ?? []).isEmpty {
-					Button("See band members") {
-						showingBandMembersView = true
-					}
-				}
+				
+				.padding(.horizontal)
+				
 			}
 		}
 		.sheet(isPresented: $showingAlbumsView) {
@@ -80,4 +73,5 @@ struct ArtistDetailView: View {
 
 #Preview {
 	ArtistDetailView(artist: .dummyArtist)
+		.environmentObject(AuthTokenManager())
 }

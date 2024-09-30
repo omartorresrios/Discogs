@@ -15,7 +15,7 @@ final class AlbumsViewModel: ObservableObject {
 	}
 
 	func sortAlbumsByYear() {
-		albums.sort { $0.year > $1.year }
+		albums.sort { ($0.year ?? 0) > ($1.year ?? 0) }
 	}
 
 	func sortAlbumsByLabel(_ label: String) {

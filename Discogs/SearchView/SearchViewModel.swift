@@ -8,7 +8,7 @@
 import Combine
 import Foundation
 
-class SearchViewModel: ObservableObject {
+final class SearchViewModel: ObservableObject {
 	@Published var searchText: String = ""
 	@Published var searchResults: [Artist] = []
 	@Published var isLoading: Bool = false
