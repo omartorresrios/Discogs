@@ -9,8 +9,8 @@ import Foundation
 import Combine
 
 protocol Service {
-	func getSearchResults(url: URL) async throws -> [Artist]
-	func getArtistInfo(url: URL) -> AnyPublisher<ArtistDetails, Error>
+	func getSearchResults(with query: String, page: Int) async throws -> [Artist]
+	func getArtistInfo(id: String) -> AnyPublisher<ArtistDetails, Error>
 }
 
 final class DiscogsService: Service {
@@ -20,7 +20,10 @@ final class DiscogsService: Service {
 		self.authTokenManager = authTokenManager
 	}
 	
-	func getSearchResults(url: URL) async throws -> [Artist] {
+	func getSearchResults(with query: String, page: Int) async throws -> [Artist] {
+		guard let url = URL(string: "https://api.discogs.com/database/search?q=\(query)&type=artist?page=\(page)&per_page=30") else {
+			return []
+		}
 		var request = URLRequest(url: url)
 		request.addValue("Discogs token=\(authTokenManager.token)", forHTTPHeaderField: "Authorization")
 		let (data, _) = try await URLSession.shared.data(for: request)
@@ -28,7 +31,10 @@ final class DiscogsService: Service {
 		return artistsResponse.results
 	}
 	
-	func getArtistInfo(url: URL) -> AnyPublisher<ArtistDetails, Error> {
+	func getArtistInfo(id: String) -> AnyPublisher<ArtistDetails, Error> {
+		guard let url = URL(string: "https://api.discogs.com/artists/\(id)") else {
+			return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
+		}
 		var request = URLRequest(url: url)
 		request.addValue("Discogs token=\(authTokenManager.token)", forHTTPHeaderField: "Authorization")
 		return URLSession.shared.dataTaskPublisher(for: request)
@@ -36,7 +42,7 @@ final class DiscogsService: Service {
 			.decode(type: ArtistDetails.self, decoder: JSONDecoder())
 			.flatMap { [weak self] artist -> AnyPublisher<ArtistDetails, Error> in
 				guard let self = self,
-					  let albumsURL = URL(string: artist.releasesUrl) else {
+					  let albumsURL = URL(string: artist.releasesUrl + "?per_page=30") else {
 					return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
 				}
 				var albumsRequest = URLRequest(url: albumsURL)

@@ -9,9 +9,10 @@ import Combine
 import Foundation
 
 final class SearchViewModel: ObservableObject {
-	@Published var searchText: String = ""
+	@Published var searchText = ""
 	@Published var searchResults: [Artist] = []
-	@Published var isLoading: Bool = false
+	@Published var isLoading = false
+	private var currentPage = 1
 	private let service: Service
 	private var cancellables = Set<AnyCancellable>()
 	
@@ -23,19 +24,18 @@ final class SearchViewModel: ObservableObject {
 			.sink { [weak self] in self?.getArtists(with: $0) }
 			.store(in: &cancellables)
 	}
-
+	
 	func getArtists(with query: String) {
 		guard !query.isEmpty else {
 			searchResults = []
-			return
-		}
-		guard let url = URL(string: "https://api.discogs.com/database/search?q=\(query)") else {
+			currentPage = 1
 			return
 		}
 		isLoading = true
+		currentPage = 1
 		Task {
 			do {
-				let searchResults = try await service.getSearchResults(url: url)
+				let searchResults = try await service.getSearchResults(with: query, page: currentPage)
 				await MainActor.run {
 					self.searchResults = searchResults
 					isLoading = false
@@ -48,5 +48,39 @@ final class SearchViewModel: ObservableObject {
 			}
 		}
 	}
+	
+	func loadMoreArtists(result: Artist) {
+		guard result == searchResults.last && !isLoading else { return }
+		isLoading = true
+		Task {
+			do {
+				let newResults = try await service.getSearchResults(with: searchText, page: currentPage + 1)
+				await MainActor.run {
+					let uniqueNewResults = newResults.filter { newArtist in
+						!self.searchResults.contains(where: { $0.id == newArtist.id })
+					}
+					self.searchResults.append(contentsOf: uniqueNewResults)
+					self.currentPage += 1
+					self.isLoading = false
+				}
+			} catch {
+				print("An error occurred while loading more artists: ", error)
+				await MainActor.run {
+					self.isLoading = false
+				}
+			}
+		}
+	}
+	
+	func showLoader() -> Bool {
+		isLoading && !searchResults.isEmpty
+	}
+	
+	func showNoResults() -> Bool {
+		searchResults.isEmpty && !searchText.isEmpty
+	}
+	
+	func showEmptyView() -> Bool {
+		searchText.isEmpty
+	}
 }
-

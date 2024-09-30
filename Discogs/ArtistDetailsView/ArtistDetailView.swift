@@ -37,7 +37,7 @@ struct ArtistDetailView: View {
 					HStack {
 						Text(viewModel.artist?.name ?? "")
 						Spacer()
-						VStack {
+						VStack(alignment: .trailing) {
 							if viewModel.artist?.albums != nil {
 								Button("See albums") {
 									showingAlbumsView = true

@@ -23,24 +23,30 @@ struct SearchView: View {
 					NavigationLink(value: result) {
 						ArtistItemView(searchResult: result)
 					}
-				}
-				.navigationTitle("Search Artists")
-				.searchable(text: $viewModel.searchText)
-				.overlay(
-					Group {
-						if viewModel.isLoading {
-							ProgressView()
-						} else if viewModel.searchResults.isEmpty && !viewModel.searchText.isEmpty {
-							Text("No results found")
-								.foregroundColor(.gray)
-						} else if viewModel.searchText.isEmpty {
-							Text("Search for an artist!")
-						}
+					.onAppear {
+						viewModel.loadMoreArtists(result: result)
 					}
-				)
-				.navigationDestination(for: Artist.self) { result in
-					ArtistDetailView(artist: result, service: service)
 				}
+				if viewModel.showLoader() {
+					VStack {
+						ProgressView()
+							.progressViewStyle(CircularProgressViewStyle(tint: .white))
+							.frame(height: 100)
+					}
+					.frame(width: 100, height: 100)
+					.background(Color.black.opacity(0.7))
+					.cornerRadius(15)
+				} else if viewModel.showNoResults() {
+					Text("No results found")
+						.foregroundColor(.gray)
+				} else if viewModel.showEmptyView() {
+					Text("Search for an artist!")
+				}
+			}
+			.navigationTitle("Search Artists")
+			.searchable(text: $viewModel.searchText)
+			.navigationDestination(for: Artist.self) { result in
+				ArtistDetailView(artist: result, service: service)
 			}
 		}
     }

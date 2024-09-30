@@ -19,11 +19,8 @@ final class ArtistDetailViewModel: ObservableObject {
 	}
 	
 	func getArtistInfo(id: String) {
-		guard let url = URL(string: "https://api.discogs.com/artists/\(id)") else {
-			return
-		}
 		isLoading = true
-		service.getArtistInfo(url: url)
+		service.getArtistInfo(id: id)
 		.receive(on: DispatchQueue.main)
 		.sink(receiveCompletion: { [weak self] completion in
 			guard let self else {
