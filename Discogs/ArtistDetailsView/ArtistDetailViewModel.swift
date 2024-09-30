@@ -25,7 +25,10 @@ final class ArtistDetailViewModel: ObservableObject {
 		isLoading = true
 		service.getArtistInfo(url: url)
 		.receive(on: DispatchQueue.main)
-		.sink(receiveCompletion: { completion in
+		.sink(receiveCompletion: { [weak self] completion in
+			guard let self else {
+				return
+			}
 			switch completion {
 			case .finished:
 				break
@@ -34,7 +37,8 @@ final class ArtistDetailViewModel: ObservableObject {
 //				self.errorMessage = error.localizedDescription
 				self.isLoading = false
 			}
-		}, receiveValue: { artist in
+		}, receiveValue: { [weak self] artist in
+			guard let self else { return }
 			self.artist = artist
 			self.isLoading = false
 		})
