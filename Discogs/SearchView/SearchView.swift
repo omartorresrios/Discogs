@@ -9,10 +9,12 @@ import SwiftUI
 
 struct SearchView: View {
 	@StateObject private var viewModel: SearchViewModel
-	private let service: Service
+	private let service: SearchService
+	let artistService: ArtistService
 	
-	init(service: Service) {
+	init(service: SearchService, artistService: ArtistService) {
 		self.service = service
+		self.artistService = artistService
 		_viewModel = StateObject(wrappedValue: SearchViewModel(service: service))
 	}
 	
@@ -47,12 +49,13 @@ struct SearchView: View {
 			.navigationTitle("Search Artists")
 			.searchable(text: $viewModel.searchText)
 			.navigationDestination(for: Artist.self) { result in
-				ArtistDetailView(artist: result, service: service)
+				ArtistDetailView(artist: result, service: artistService)
 			}
 		}
     }
 }
 
 #Preview {
-	SearchView(service: DiscogsService(authTokenManager: AuthTokenManager()))
+	SearchView(service: SearchUseCase(authTokenManager: AuthTokenManager()), 
+			   artistService: ArtistUseCase(authTokenManager: AuthTokenManager()))
 }

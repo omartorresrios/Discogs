@@ -12,10 +12,10 @@ final class ArtistDetailViewModel: ObservableObject {
 	@Published var isLoading = false
 	@Published var artist: ArtistDetails?
 	@Published var errorMessage = ""
-	private let service: Service
+	private let service: ArtistService
 	private var cancellables = Set<AnyCancellable>()
 	
-	init(service: Service) {
+	init(service: ArtistService) {
 		self.service = service
 	}
 	

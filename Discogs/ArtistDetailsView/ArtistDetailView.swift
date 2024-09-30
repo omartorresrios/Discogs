@@ -13,7 +13,7 @@ struct ArtistDetailView: View {
 	@State var showingBandMembersView = false
 	private let artist: Artist
 	
-	init(artist: Artist, service: Service) {
+	init(artist: Artist, service: ArtistService) {
 		self.artist = artist
 		_viewModel = StateObject(wrappedValue: ArtistDetailViewModel(service: service))
 	}
@@ -72,6 +72,6 @@ struct ArtistDetailView: View {
 }
 
 #Preview {
-	ArtistDetailView(artist: .dummyArtist, service: DiscogsService(authTokenManager: AuthTokenManager()))
+	ArtistDetailView(artist: .dummyArtist, service: ArtistUseCase(authTokenManager: AuthTokenManager()))
 		.environmentObject(AuthTokenManager())
 }

@@ -37,17 +37,14 @@ struct ArtistImage: Decodable {
 	}
 }
 
-struct AlbumResponse: Decodable {
-	let releases: [Album]
-}
-
-struct Album: Decodable {
-	let id: Int
-	let title: String
-	let type: String
-	let year: Int?
-	let label: String?
-	let thumb: String
+extension ArtistDetails {
+	static let dummyArtistDetails = ArtistDetails(id: 1,
+												  name: "Nirvana",
+												  images: [],
+												  profile: "some profile info",
+												  releasesUrl: "http://www.some-url.com",
+												  members: [],
+												  albums: [])
 }
 
 struct Member: Decodable {
@@ -59,15 +56,6 @@ struct Member: Decodable {
 		case thumbnailUrl = "thumbnail_url"
 		case id, name
 	}
-}
-
-extension Album {
-	static let dummyAlbum = Album(id: 1, 
-								  title: "album",
-								  type: "master",
-								  year: 1990,
-								  label: "GRD",
-								  thumb: "https://api.discogs.com/masters/155876")
 }
 
 extension Member {
