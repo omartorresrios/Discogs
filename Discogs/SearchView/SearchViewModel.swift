@@ -14,10 +14,10 @@ final class SearchViewModel: ObservableObject {
 	@Published var isLoading = false
 	@Published var errorMessage = ""
 	private var currentPage = 1
-	private let service: Service
+	private let service: SearchService
 	private var cancellables = Set<AnyCancellable>()
 	
-	init(service: Service) {
+	init(service: SearchService) {
 		self.service = service
 		subscribeToSearchText()
 	}
@@ -75,9 +75,9 @@ final class SearchViewModel: ObservableObject {
 					self.currentPage += 1
 					self.isLoading = false
 				}
-			} catch {
-				print("An error occurred while loading more artists: ", error)
+			} catch let error as SearchRequestError {
 				await MainActor.run {
+					self.setErrorMessage(with: error)
 					self.isLoading = false
 				}
 			}

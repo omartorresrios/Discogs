@@ -17,7 +17,8 @@ struct DiscogsApp: App {
 				if authTokenManager.token.isEmpty {
 					TokenInputView()
 				} else {
-					SearchView(service: DiscogsService(authTokenManager: authTokenManager))
+					SearchView(service: SearchUseCase(authTokenManager: authTokenManager),
+							   artistService: ArtistUseCase(authTokenManager: authTokenManager))
 				}
 			}
 			

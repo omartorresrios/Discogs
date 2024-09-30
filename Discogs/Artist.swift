@@ -26,4 +26,8 @@ extension Artist {
 									title: "Nirvana",
 									thumb: "http://www.thumbnail.com",
 									coverImage: "http://www.cover-image.com")
+	static let dummyArtist1 = Artist(id: 2,
+									title: "50 cent",
+									thumb: "http://www.thumbnail.com",
+									coverImage: "http://www.cover-image.com")
 }
