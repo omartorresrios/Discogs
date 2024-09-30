@@ -11,8 +11,8 @@ struct ArtistDetailView: View {
 	@StateObject private var viewModel = ArtistDetailViewModel()
 	@EnvironmentObject var authTokenManager: AuthTokenManager
 	@State var showingAlbumsView = false
-	@State var showingBanMembersView = false
-	private var artist: Artist
+	@State var showingBandMembersView = false
+	private let artist: Artist
 	
 	init(artist: Artist) {
 		self.artist = artist
@@ -59,7 +59,7 @@ struct ArtistDetailView: View {
 				}
 				if !(viewModel.artist?.members ?? []).isEmpty {
 					Button("See band members") {
-						showingBanMembersView = true
+						showingBandMembersView = true
 					}
 				}
 			}
@@ -68,12 +68,8 @@ struct ArtistDetailView: View {
 			AlbumsView(albums: viewModel.artist?.albums ?? [])
 			.presentationDetents([.medium])
 		}
-		.sheet(isPresented: $showingBanMembersView) {
-			ScrollView {
-				ForEach(viewModel.artist?.members ?? [], id: \.id) { member in
-					Text("\(member.name)")
-				}
-			}
+		.sheet(isPresented: $showingBandMembersView) {
+			MembersView(members: viewModel.artist?.members ?? [])
 			.presentationDetents([.medium])
 		}
 		.onAppear {

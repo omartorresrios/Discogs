@@ -24,6 +24,8 @@
 		244038FD2CA873D0008D156C /* AlbumsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244038FC2CA873D0008D156C /* AlbumsView.swift */; };
 		244038FF2CAA2BBC008D156C /* AlbumsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244038FE2CAA2BBC008D156C /* AlbumsViewModel.swift */; };
 		244039022CAA2C99008D156C /* AlbumsOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244039012CAA2C99008D156C /* AlbumsOrder.swift */; };
+		244039042CAA36F1008D156C /* AlbumItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244039032CAA36F1008D156C /* AlbumItemView.swift */; };
+		244039062CAA390E008D156C /* MembersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244039052CAA390E008D156C /* MembersView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +66,8 @@
 		244038FC2CA873D0008D156C /* AlbumsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumsView.swift; sourceTree = "<group>"; };
 		244038FE2CAA2BBC008D156C /* AlbumsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumsViewModel.swift; sourceTree = "<group>"; };
 		244039012CAA2C99008D156C /* AlbumsOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumsOrder.swift; sourceTree = "<group>"; };
+		244039032CAA36F1008D156C /* AlbumItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumItemView.swift; sourceTree = "<group>"; };
+		244039052CAA390E008D156C /* MembersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembersView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,6 +179,7 @@
 			children = (
 				244038EC2CA78CB6008D156C /* ArtistDetailView.swift */,
 				244038F22CA857AA008D156C /* ArtistDetailViewModel.swift */,
+				244039052CAA390E008D156C /* MembersView.swift */,
 			);
 			path = ArtistDetailsView;
 			sourceTree = "<group>";
@@ -185,6 +190,7 @@
 				244038FC2CA873D0008D156C /* AlbumsView.swift */,
 				244038FE2CAA2BBC008D156C /* AlbumsViewModel.swift */,
 				244039012CAA2C99008D156C /* AlbumsOrder.swift */,
+				244039032CAA36F1008D156C /* AlbumItemView.swift */,
 			);
 			path = AlbumsView;
 			sourceTree = "<group>";
@@ -319,7 +325,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				244039042CAA36F1008D156C /* AlbumItemView.swift in Sources */,
 				244038E52CA75925008D156C /* TokenInputView.swift in Sources */,
+				244039062CAA390E008D156C /* MembersView.swift in Sources */,
 				244038ED2CA78CB6008D156C /* ArtistDetailView.swift in Sources */,
 				244039022CAA2C99008D156C /* AlbumsOrder.swift in Sources */,
 				244038FD2CA873D0008D156C /* AlbumsView.swift in Sources */,
