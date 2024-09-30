@@ -44,6 +44,10 @@ struct AlbumResponse: Decodable {
 struct Album: Decodable {
 	let id: Int
 	let title: String
+	let type: String
+	let year: Int
+	let label: String?
+	let thumb: String
 }
 
 struct Member: Decodable {
@@ -58,5 +62,5 @@ struct Member: Decodable {
 }
 
 extension Album {
-	static let dummyAlbum = Album(id: 1, title: "album")
+	static let dummyAlbum = Album(id: 1, title: "album", type: "master", year: 1990, label: "GRD", thumb: "https://api.discogs.com/masters/155876")
 }
